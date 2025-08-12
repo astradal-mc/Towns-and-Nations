@@ -1,8 +1,10 @@
 package org.leralix.tan.storage.database;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class MySqlHandler extends DatabaseHandler {
 
@@ -19,29 +21,24 @@ public class MySqlHandler extends DatabaseHandler {
         this.user = username;
         this.password = password;
     }
-
     @Override
-    public void connect() throws SQLException {
+    public void connect() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + databaseName); // Address of your running MySQL database
+        config.setUsername(user); // Username
+        config.setPassword(this.password); // Password
+        config.setMaximumPoolSize(10); // Pool size defaults to 10
 
-        if (host == null || databaseName == null) {
-            return;
+        config.addDataSourceProperty("", ""); // MISC settings to add
+        HikariDataSource dataSource = new HikariDataSource(config);
+
+        try (Connection connection = dataSource.getConnection()) {
+            // Use a try-with-resources here to autoclose the connection.
+            PreparedStatement sql = connection.prepareStatement("SQL");
+            // Execute statement
+        } catch (Exception e) {
+            // Handle any exceptions that arise from getting / handing the exception.
         }
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        MysqlDataSource ds = new MysqlDataSource();
-        ds.setServerName(host);
-        ds.setPort(port);
-        ds.setDatabaseName(databaseName);
-        ds.setUser(user);
-        ds.setPassword(password);
-        ds.setUseSSL(true);
-
-        this.dataSource = ds;
-        initialize();
     }
 
 }

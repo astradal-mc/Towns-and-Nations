@@ -1,7 +1,6 @@
 package org.leralix.tan.storage.database;
 
 import org.leralix.tan.TownsAndNations;
-import org.sqlite.SQLiteDataSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +31,6 @@ public class SQLiteHandler extends DatabaseHandler {
             }
         }
 
-        SQLiteDataSource sqLiteDataSource = new SQLiteDataSource();
-        sqLiteDataSource.setUrl("jdbc:sqlite:" + databasePath);
-        this.dataSource = sqLiteDataSource;
-        initialize();
+        Connection connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
     }
 }
