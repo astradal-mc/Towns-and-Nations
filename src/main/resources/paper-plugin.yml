@@ -3,9 +3,27 @@ version: '${version}'
 main: org.leralix.tan.TownsAndNations
 api-version: "1.19"
 authors: [ Leralix ]
-depend: [SphereLib, Vault]
-softdepend: [PlaceholderAPI, WorldGuard]
 description: A town plugin with roleplay elements
+
+dependencies:
+  server:
+    SphereLib:
+      load: AFTER
+      required: true
+      join-classpath: false
+    Vault:
+      load: AFTER
+      required: true
+      join-classpath: false
+    PlaceholderAPI:
+      load: AFTER
+      required: false
+      join-classpath: false
+    WorldGuard:
+      load: AFTER
+      required: false
+      join-classpath: false
+
 commands:
   tan:
     description: base command of Towns and Nations
